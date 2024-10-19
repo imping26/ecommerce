@@ -76,8 +76,7 @@ export const MainContent = () => {
   const totalProducts = 100;
   const totalPages = Math.ceil(totalProducts / itemsPerPage);
 
-  const handlePageChange = (page: number) => {
-    console.log(currentPage);
+  const handlePageChange = (page: number) => { 
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
     }
@@ -87,19 +86,14 @@ export const MainContent = () => {
     const buttons: number[] = [];
 
     let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);
-
+    let endPage = Math.min(totalPages, currentPage + 2);  
     //handle first page (1 or 2)
-    if (currentPage - 2 < 1) {
+    if (currentPage - 2 < 1) { 
       endPage = Math.min(totalPages, endPage + (2 - currentPage - 1));
-    }
-
+    } 
     //handle near last page
     if (currentPage + 2 > totalPages) {
-      startPage = Math.min(
-        totalPages - 2,
-        startPage - (2 - totalPages - currentPage)
-      );
+        startPage = Math.max(1, startPage - (currentPage + 2 - totalPages));
     }
 
     for (let page = startPage; page <= endPage; page++) {
