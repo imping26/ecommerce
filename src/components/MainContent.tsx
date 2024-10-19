@@ -93,13 +93,14 @@ export const MainContent = () => {
     }
 
     if (currentPage + 2 > totalPages) {
-      startPage = Math.min(1, startPage - 2 - totalPages - currentPage);
+      startPage = Math.min(1, startPage - (2 - totalPages - currentPage));
     }
 
     for (let page = startPage; page <= endPage; page++) {
       buttons.push(page);
     }
-
+    console.log(startPage);
+    console.log(endPage);
     return buttons;
   };
 
