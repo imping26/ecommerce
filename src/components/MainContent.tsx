@@ -3,6 +3,7 @@ import { useFilter } from "./FilterContext";
 import { Tally3 } from "lucide-react";
 import axios from "axios";
 import { BookCard } from "./BookCard";
+import { RecommendList } from "./RecommendList";
 
 export const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
@@ -11,7 +12,7 @@ export const MainContent = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [dropdownOpen, setDropdownOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const itemsPerPage = 12;
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export const MainContent = () => {
   const totalProducts = 100;
   const totalPages = Math.ceil(totalProducts / itemsPerPage);
 
-  const handlePageChange = (page: number) => { 
+  const handlePageChange = (page: number) => {
     if (page > 0 && page <= totalPages) {
       setCurrentPage(page);
     }
@@ -86,14 +87,14 @@ export const MainContent = () => {
     const buttons: number[] = [];
 
     let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);  
+    let endPage = Math.min(totalPages, currentPage + 2);
     //handle first page (1 or 2)
-    if (currentPage - 2 < 1) { 
+    if (currentPage - 2 < 1) {
       endPage = Math.min(totalPages, endPage + (2 - currentPage - 1));
-    } 
+    }
     //handle near last page
     if (currentPage + 2 > totalPages) {
-        startPage = Math.max(1, startPage - (currentPage + 2 - totalPages));
+      startPage = Math.max(1, startPage - (currentPage + 2 - totalPages));
     }
 
     for (let page = startPage; page <= endPage; page++) {
@@ -104,93 +105,99 @@ export const MainContent = () => {
   };
 
   return (
-    <section className="xl:w-[55rem] lg:w-[55rem] sm:w-[40rem] xs:w-[20rem] p-5">
-      <div className="mb-5">
-        <div className="flex flex-col sm:flex-row justify-between items-center">
-          <div className="relative mb-5 mt-5">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="border px-4 py-2 rounded-full flex items-center"
-            >
-              <Tally3 className="mr-2" />
-              {filter === "all"
-                ? "Filter"
-                : filter.charAt(0).toLowerCase() + filter.slice(1)}
-            </button>
+    <>
+      <section className="w-[70%] p-5 flex border-r">
+        <div className="mb-5">
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <div className="relative mb-5 mt-5">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="border px-4 py-2 rounded-full flex items-center"
+              >
+                <Tally3 className="mr-2" />
+                {filter === "all"
+                  ? "Filter"
+                  : filter.charAt(0).toLowerCase() + filter.slice(1)}
+              </button>
 
-            {dropdownOpen && (
-              <div className="absolute bg-white border border-gray-300 rounded mt-2 w-full sm:w-40">
-                <button
-                  onClick={() => setFilter("cheap")}
-                  className="block px-4 py-2 w-full text-left hover:bg-gray-200"
-                >
-                  Cheap
-                </button>
-                <button
-                  onClick={() => setFilter("expensive")}
-                  className="block px-4 py-2 w-full text-left hover:bg-gray-200"
-                >
-                  Expensive
-                </button>
-                <button
-                  onClick={() => setFilter("popular")}
-                  className="block px-4 py-2 w-full text-left hover:bg-gray-200"
-                >
-                  Popular
-                </button>
-              </div>
-            )}
+              {dropdownOpen && (
+                <div className="absolute bg-white border border-gray-300 rounded mt-2 w-full sm:w-40">
+                  <button
+                    onClick={() => setFilter("cheap")}
+                    className="block px-4 py-2 w-full text-left hover:bg-gray-200"
+                  >
+                    Cheap
+                  </button>
+                  <button
+                    onClick={() => setFilter("expensive")}
+                    className="block px-4 py-2 w-full text-left hover:bg-gray-200"
+                  >
+                    Expensive
+                  </button>
+                  <button
+                    onClick={() => setFilter("popular")}
+                    className="block px-4 py-2 w-full text-left hover:bg-gray-200"
+                  >
+                    Popular
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-5">
-          {filterProducts.map((product) => {
-            return (
-              <BookCard
-                key={product.id}
-                id={product.id}
-                image={product.thumbnail}
-                price={product.price}
-                title={product.title}
-              />
-            );
-          })}
-        </div>
-
-        <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
-          <button
-            className="border px-4 py-2 mx-2 rounded-full"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-
-          <div className="flex flex-wrap justify-center">
-            {getPaginationButton().map((page) => {
+          {/* product items */}
+          <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-5">
+            {filterProducts.map((product) => {
               return (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`border px-4 py-2 mx-1 rounded-full ${
-                    page === currentPage ? "bg-black text-white" : ""
-                  }`}
-                >
-                  {page}
-                </button>
+                <BookCard
+                  key={product.id}
+                  id={product.id}
+                  image={product.thumbnail}
+                  price={product.price}
+                  title={product.title}
+                />
               );
             })}
           </div>
 
-          <button
-            className="border px-4 py-2 mx-2 rounded-full"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+          <div className="flex flex-col sm:flex-row justify-between items-center mt-5">
+            <button
+              className="border px-4 py-2 mx-2 rounded-full"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+
+            <div className="flex flex-wrap justify-center">
+              {getPaginationButton().map((page) => {
+                return (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`border px-4 py-2 mx-1 rounded-full ${
+                      page === currentPage ? "bg-black text-white" : ""
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              className="border px-4 py-2 mx-2 rounded-full"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section className="w-[30%] p-3">
+        <RecommendList />
+      </section>
+    </>
   );
 };

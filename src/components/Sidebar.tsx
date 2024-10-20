@@ -39,7 +39,7 @@ const Sidebar = () => {
         const data: FetchResponse = await response.json();
         const uniqueCategories = Array.from(
           new Set(data.products.map((product) => product.category))
-        );
+        ); 
         setCategories(uniqueCategories);
       } catch (e) {
         console.log("error occur", e);
@@ -82,7 +82,7 @@ const Sidebar = () => {
       <section>
         <input
           type="text"
-          className="border-2 rounded px-2 sm:mb-0"
+          className="border-2 rounded p-2 mb-2"
           placeholder="Search Product"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
