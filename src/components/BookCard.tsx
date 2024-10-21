@@ -1,11 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface BookCardProps {
   id: string;
   title: string;
   image: string;
   price: number;
+  allItem: object;
+  recentViewHandle:any;
 }
 
 export const BookCard: React.FC<BookCardProps> = ({
@@ -13,10 +15,19 @@ export const BookCard: React.FC<BookCardProps> = ({
   title,
   image,
   price,
+  allItem,
+  recentViewHandle
 }) => {
+  const navigate = useNavigate();
+
+  const handleGotoProduct = (id: string) => {
+      recentViewHandle(allItem); 
+    navigate(`/product/${id}`);
+  };
+
   return (
-    <div className="border p-4 rounded">
-      <Link to={`/product/${id}`}>
+    <button  onClick={() => handleGotoProduct(id)} className="border p-4 rounded">
+      <div>
         <img
           src={image}
           alt={title}
@@ -24,7 +35,7 @@ export const BookCard: React.FC<BookCardProps> = ({
         />
         <h2 className="font-bold">{title}</h2>
         <p>${price}</p>
-      </Link>
-    </div>
+      </div>
+    </button>
   );
 };

@@ -11,6 +11,8 @@ interface FilterContextType {
   setMaxPrice: (price: number | undefined) => void;
   keyword: string;
   setKeyword: (keyword: string) => void;
+  recentViewList: any[];
+  setRecentViewList: (list: any[]) => void;
 }
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);
@@ -23,6 +25,7 @@ export const FilterProvider: React.FC<{ children: ReactNode }> = ({
   const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
   const [keyword, setKeyword] = useState<string>("");
+  const [recentViewList, setRecentViewList] = useState<any[]>([]);
 
   return (
     <FilterContext.Provider
@@ -37,6 +40,8 @@ export const FilterProvider: React.FC<{ children: ReactNode }> = ({
         setMaxPrice,
         keyword,
         setKeyword,
+        recentViewList,
+        setRecentViewList,
       }}
     >
       {children}

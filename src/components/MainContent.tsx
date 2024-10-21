@@ -4,6 +4,7 @@ import { Tally3 } from "lucide-react";
 import axios from "axios";
 import { BookCard } from "./BookCard";
 import { RecommendList } from "./RecommendList";
+import { RecentViewProduct } from "./RecentViewProduct";
 
 export const MainContent = () => {
   const { searchQuery, selectedCategory, minPrice, maxPrice, keyword } =
@@ -13,7 +14,15 @@ export const MainContent = () => {
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [recentViewProduct, setRecentViewProduct] = useState<any[]>([]);
   const itemsPerPage = 12;
+
+  useEffect(() => {
+    // @ts-ignore
+    const recentViewItem =
+      JSON.parse(localStorage.getItem("recentViews")) || [];
+    setRecentViewProduct(recentViewItem);
+  }, []);
 
   useEffect(() => {
     let url = `https://dummyjson.com/products?limit=${itemsPerPage}&skip=${
@@ -104,6 +113,21 @@ export const MainContent = () => {
     return buttons;
   };
 
+  const handleRecentView = (item: { id: string | number }) => {
+    // @ts-ignore
+    let recentItem = JSON.parse(localStorage.getItem("recentViews")) || [];
+
+    recentItem = [...recentItem, item];
+
+    recentItem = recentItem.filter(
+      // @ts-ignore
+      (i, index, self) => index === self.findIndex((t) => t.id === i.id)
+    );
+
+    localStorage.setItem("recentViews", JSON.stringify(recentItem));
+    setRecentViewProduct(recentItem);
+  };
+
   return (
     <>
       <section className="w-[70%] p-5 flex border-r">
@@ -151,10 +175,12 @@ export const MainContent = () => {
               return (
                 <BookCard
                   key={product.id}
+                  allItem={product}
                   id={product.id}
                   image={product.thumbnail}
                   price={product.price}
                   title={product.title}
+                  recentViewHandle={handleRecentView}
                 />
               );
             })}
@@ -197,6 +223,7 @@ export const MainContent = () => {
       </section>
       <section className="w-[30%] p-3">
         <RecommendList />
+        <RecentViewProduct data={recentViewProduct} />
       </section>
     </>
   );
