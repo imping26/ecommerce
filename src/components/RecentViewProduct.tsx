@@ -1,9 +1,7 @@
 import React from 'react'
 
- 
-
 export const RecentViewProduct = ({ data }: { data: any[] }) => {
-  console.log(data)
+ 
   return (
     <div className="mt-5">
     <div className="pb-4">
@@ -13,7 +11,7 @@ export const RecentViewProduct = ({ data }: { data: any[] }) => {
       {data.map((data) => {
         return (
           <div className="col-span-4" key={data.id}>
-            <img src={data.images} alt={data.title} />
+            <img src={data.images[0]} alt={data.title} />
           </div>
         );
       })}

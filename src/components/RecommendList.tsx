@@ -23,7 +23,7 @@ export const RecommendList = () => {
         {recommendedList.map((product) => {
           return (
             <div className="col-span-4" key={product.id}>
-              <img src={product.images} alt={product.title} />
+              <img src={product.images[0]} alt={product.title} />
             </div>
           );
         })}

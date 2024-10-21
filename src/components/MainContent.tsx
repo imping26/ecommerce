@@ -19,8 +19,7 @@ export const MainContent = () => {
 
   useEffect(() => {
     // @ts-ignore
-    const recentViewItem =
-      JSON.parse(localStorage.getItem("recentViews")) || [];
+    const recentViewItem = JSON.parse(localStorage.getItem("recentViews")) || [];
     setRecentViewProduct(recentViewItem);
   }, []);
 
@@ -123,6 +122,10 @@ export const MainContent = () => {
       // @ts-ignore
       (i, index, self) => index === self.findIndex((t) => t.id === i.id)
     );
+
+    if (recentItem.length > 6) {
+      recentItem.shift();
+    }
 
     localStorage.setItem("recentViews", JSON.stringify(recentItem));
     setRecentViewProduct(recentItem);
